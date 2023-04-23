@@ -1,7 +1,7 @@
 import 'package:flutter_string_to_rich_text/element.dart';
 
 final regex = RegExp(
-  r'https?:\/\/([A-Z0-9.-]+)(:[0-9]+)?(\/[^?]*)?',
+  r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)',
   caseSensitive: false,
 );
 

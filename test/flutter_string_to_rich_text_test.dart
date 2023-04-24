@@ -60,4 +60,70 @@ void main() {
       ],
     );
   });
+
+  test('string with sticker to List', () {
+    expectListEqual(
+      stringToRichText("""你好[握手]"""),
+      [
+        TextElement("你好"),
+        StickerElement("[握手]"),
+      ],
+    );
+  });
+
+  test('custom sticker onMatch', () {
+    final parsers = <Parser>[
+      UrlElement.parser(),
+      StickerElement.parser(
+        onMatch: (match) {
+          return match[1] == "哈哈";
+        },
+      )
+    ];
+    expectListEqual(
+      stringToRichText(
+        """你好[握手][[哈哈]]""",
+      ),
+      [
+        TextElement("你好"),
+        StickerElement("[握手]"),
+        TextElement("["),
+        StickerElement("[哈哈]"),
+        TextElement("]"),
+      ],
+    );
+    expectListEqual(
+      stringToRichText(
+        """你好[握手][[哈哈]]""",
+        parsers: parsers,
+      ),
+      [
+        TextElement("你好"),
+        TextElement("[握手]"),
+        TextElement("["),
+        StickerElement("[哈哈]"),
+        TextElement("]"),
+      ],
+    );
+  });
+
+  test('custom sticker regex', () {
+    final parsers = <Parser>[
+      UrlElement.parser(),
+      StickerElement.parser(
+        regex: RegExp(r'\[(哈哈|haha)\]|\[(亲亲|kiss)\]'),
+      )
+    ];
+    expectListEqual(
+      stringToRichText(
+        """你好[握手][哈哈][kiss]""",
+        parsers: parsers,
+      ),
+      [
+        TextElement("你好[握手]"),
+        StickerElement("[哈哈]"),
+        StickerElement("[kiss]"),
+      ],
+    );
+  });
 }

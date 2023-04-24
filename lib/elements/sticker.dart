@@ -1,14 +1,17 @@
 import 'package:flutter_string_to_rich_text/element.dart';
 
 final _defaultRegex = RegExp(
-  r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)',
+  r'\[([^\n\[\]]+)\]',
   caseSensitive: false,
 );
 
-class UrlElement extends Element {
-  UrlElement(super.text);
+class StickerElement extends Element {
+  StickerElement(super.text);
 
-  static Parser parser({RegExp? regex}) {
+  static Parser parser({
+    RegExp? regex,
+    bool Function(Match)? onMatch,
+  }) {
     regex ??= _defaultRegex;
 
     Parser parse;
@@ -25,7 +28,13 @@ class UrlElement extends Element {
         element.text.splitMapJoin(
           regex!,
           onMatch: (match) {
-            list.add(UrlElement(match[0]!));
+            var shouldMatch = onMatch?.call(match) ?? true;
+
+            if (shouldMatch) {
+              list.add(StickerElement(match[0]!));
+            } else {
+              list.add(TextElement(match[0]!));
+            }
             return "";
           },
           onNonMatch: (p0) {

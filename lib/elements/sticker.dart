@@ -5,8 +5,10 @@ final _defaultRegex = RegExp(
   caseSensitive: false,
 );
 
-class StickerElement extends Element {
-  StickerElement(super.text);
+class StickerElement extends Element with ElementMatch {
+  StickerElement(super.text, {required Match match}) {
+    this.match = match;
+  }
 
   static Parser parser({
     RegExp? regex,
@@ -31,7 +33,7 @@ class StickerElement extends Element {
             var shouldMatch = onMatch?.call(match) ?? true;
 
             if (shouldMatch) {
-              list.add(StickerElement(match[0]!));
+              list.add(StickerElement(match[0]!, match: match));
             } else {
               list.add(TextElement(match[0]!));
             }

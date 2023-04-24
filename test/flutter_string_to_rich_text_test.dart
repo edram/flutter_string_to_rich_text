@@ -105,23 +105,29 @@ void main() {
     );
   });
 
-  test('custom sticker regex', () {
+  test('custom sticker regex and match', () {
     final parsers = <Parser>[
       UrlElement.parser(),
       StickerElement.parser(
-        regex: RegExp(r'\[(哈哈|haha)\]|\[(亲亲|kiss)\]'),
+        regex: RegExp(r'\[(哈哈|haha|亲亲|kiss)\]'),
       )
     ];
+    var result = stringToRichText(
+      """你好[握手][哈哈][kiss]""",
+      parsers: parsers,
+    );
     expectListEqual(
-      stringToRichText(
-        """你好[握手][哈哈][kiss]""",
-        parsers: parsers,
-      ),
+      result,
       [
         [TextElement, "你好[握手]"],
         [StickerElement, "[哈哈]"],
         [StickerElement, "[kiss]"],
       ],
     );
+
+    var stickers = [result[1] as StickerElement, result[2] as StickerElement];
+
+    expect(stickers[0].match[1], "哈哈");
+    expect(stickers[1].match[1], "kiss");
   });
 }

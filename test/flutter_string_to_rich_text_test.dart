@@ -1,36 +1,34 @@
-import 'package:collection/collection.dart';
 import 'package:flutter_string_to_rich_text/flutter_string_to_rich_text.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-final listEqual = const ListEquality().equals;
+void expectListEqual(List<Element> actual, List expected) {
+  expect(actual.length, expected.length);
+  var index = 0;
+  for (var item in actual) {
+    var testItem = expected[index];
+    var type = testItem[0] as Type;
+    var text = testItem[1] as String;
+    expect(item.runtimeType, type);
+    expect(item.text, text);
 
-void expectListEqual(List actual, List expected) {
-  expect(
-    listEqual(
-      actual,
-      expected,
-    ),
-    true,
-    reason: "Expected $actual to be $expected",
-  );
+    // next
+    index = index + 1;
+  }
 }
 
 void main() {
   test('string to List', () {
-    expectListEqual(
-      stringToRichText("你好"),
-      [
-        TextElement("你好"),
-      ],
-    );
+    expectListEqual(stringToRichText("你好"), [
+      [TextElement, "你好"],
+    ]);
   });
 
   test('string with url to List', () {
     expectListEqual(
       stringToRichText("你好 https://www.baidu.com"),
       [
-        TextElement("你好 "),
-        UrlElement("https://www.baidu.com"),
+        [TextElement, "你好 "],
+        [UrlElement, "https://www.baidu.com"],
       ],
     );
   });
@@ -39,10 +37,10 @@ void main() {
     expectListEqual(
       stringToRichText("你好 https://www.baidu.com 世界 https://www.google.com"),
       [
-        TextElement("你好 "),
-        UrlElement("https://www.baidu.com"),
-        TextElement(" 世界 "),
-        UrlElement("https://www.google.com"),
+        [TextElement, "你好 "],
+        [UrlElement, "https://www.baidu.com"],
+        [TextElement, " 世界 "],
+        [UrlElement, "https://www.google.com"],
       ],
     );
   });
@@ -52,11 +50,11 @@ void main() {
       stringToRichText("""你好 https://www.baidu.com 
 世界 https://www.google.com """),
       [
-        TextElement("你好 "),
-        UrlElement("https://www.baidu.com"),
-        TextElement(" \n世界 "),
-        UrlElement("https://www.google.com"),
-        TextElement(" "),
+        [TextElement, "你好 "],
+        [UrlElement, "https://www.baidu.com"],
+        [TextElement, " \n世界 "],
+        [UrlElement, "https://www.google.com"],
+        [TextElement, " "],
       ],
     );
   });
@@ -65,8 +63,8 @@ void main() {
     expectListEqual(
       stringToRichText("""你好[握手]"""),
       [
-        TextElement("你好"),
-        StickerElement("[握手]"),
+        [TextElement, "你好"],
+        [StickerElement, "[握手]"],
       ],
     );
   });
@@ -85,11 +83,11 @@ void main() {
         """你好[握手][[哈哈]]""",
       ),
       [
-        TextElement("你好"),
-        StickerElement("[握手]"),
-        TextElement("["),
-        StickerElement("[哈哈]"),
-        TextElement("]"),
+        [TextElement, "你好"],
+        [StickerElement, "[握手]"],
+        [TextElement, "["],
+        [StickerElement, "[哈哈]"],
+        [TextElement, "]"],
       ],
     );
     expectListEqual(
@@ -98,11 +96,11 @@ void main() {
         parsers: parsers,
       ),
       [
-        TextElement("你好"),
-        TextElement("[握手]"),
-        TextElement("["),
-        StickerElement("[哈哈]"),
-        TextElement("]"),
+        [TextElement, "你好"],
+        [TextElement, "[握手]"],
+        [TextElement, "["],
+        [StickerElement, "[哈哈]"],
+        [TextElement, "]"],
       ],
     );
   });
@@ -120,9 +118,9 @@ void main() {
         parsers: parsers,
       ),
       [
-        TextElement("你好[握手]"),
-        StickerElement("[哈哈]"),
-        StickerElement("[kiss]"),
+        [TextElement, "你好[握手]"],
+        [StickerElement, "[哈哈]"],
+        [StickerElement, "[kiss]"],
       ],
     );
   });

@@ -4,7 +4,11 @@ import 'package:flutter_string_to_rich_text/element.dart';
 
 export './element.dart';
 
-final defaultParsers = <Parser>[UrlElement.parser(), StickerElement.parser()];
+final defaultParsers = <Parser>[
+  UrlElement.parser(),
+  StickerElement.parser(),
+  NewlineElement.parser()
+];
 
 List<Element> stringToRichText(
   String? text, {

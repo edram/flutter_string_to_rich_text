@@ -52,7 +52,9 @@ void main() {
       [
         [TextElement, "你好 "],
         [UrlElement, "https://www.baidu.com"],
-        [TextElement, " \n世界 "],
+        [TextElement, " "],
+        [NewlineElement, "\n"],
+        [TextElement, "世界 "],
         [UrlElement, "https://www.google.com"],
         [TextElement, " "],
       ],

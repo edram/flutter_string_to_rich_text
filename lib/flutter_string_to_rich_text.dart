@@ -4,20 +4,23 @@ import 'package:flutter_string_to_rich_text/element.dart';
 
 export './element.dart';
 
-final defaultParsers = [UrlElement.parse];
+final defaultParsers = <Parser>[UrlElement.parser()];
 
 List<Element> stringToRichText(
-  String? text,
-) {
+  String? text, {
+  List<Parser>? parsers,
+}) {
   if (text == null) {
     return [];
   }
+
+  parsers ??= defaultParsers;
 
   var list = [TextElement(text)];
 
   // url 解析
   List<Element> parseToElementList(List<Element> list) {
-    for (var parser in defaultParsers) {
+    for (var parser in parsers!) {
       list = parser(list);
     }
     return list;

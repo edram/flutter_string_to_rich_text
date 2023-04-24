@@ -1,6 +1,8 @@
 export "./elements/text.dart";
 export "./elements/url.dart";
 
+typedef Parser = List<Element> Function(List<Element> elements);
+
 abstract class Element {
   final String text;
 

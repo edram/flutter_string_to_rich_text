@@ -50,12 +50,13 @@ void main() {
   test('string with multiple line urls to List', () {
     expectListEqual(
       stringToRichText("""你好 https://www.baidu.com 
-世界 https://www.google.com"""),
+世界 https://www.google.com """),
       [
         TextElement("你好 "),
         UrlElement("https://www.baidu.com"),
         TextElement(" \n世界 "),
         UrlElement("https://www.google.com"),
+        TextElement(" "),
       ],
     );
   });

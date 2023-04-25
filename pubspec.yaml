@@ -1,5 +1,5 @@
 name: flutter_string_to_rich_text
-description: A new Flutter package project.
+description: A helper that convert strings to rich text
 version: 0.0.1
 homepage:
 
